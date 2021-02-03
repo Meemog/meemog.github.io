@@ -1,10 +1,21 @@
 import duolingo
 import time
-lingo = duolingo.Duolingo("osk73080", "DefaultPassword")
+import json
 
-data = lingo.get_leaderboard("month", time.time())
+def GetPoints():
+    lingo = duolingo.Duolingo("osk73080", "DefaultPassword")
 
-for item in data:
-    username = item["username"]
-    score = item["points"]
-    print("%20s: %5d" % (username, score))
+    data = lingo.get_leaderboard("month", time.time())
+    scoresDictionary = {}
+    for item in data:
+        username = item["username"]
+        score = item["points"]
+        scoresDictionary[username] = score
+    return scoresDictionary
+    
+def DumpData(scores):
+    with open('scores.json', 'w') as fp:
+       json.dump(scores, fp)
+
+
+DumpData(GetPoints())
